@@ -9,13 +9,13 @@ import cl.i2b.properties.container.Container;
 public class FileProcessorTestCase {
 
 	@Test
-	public void testFilePropertiesDirectory() {
-		@Properties("/home/rampi/properties/")
+	public void testFilePropertiesDirectory() {		
+		@Properties("src/test/resources/")
 		class PropTest{
 			@Properties
 			private String url;
-			@Properties(key="saludo")
-			private String sayHello;
+			@Properties(key="sayHello")
+			private String hello;
 			public PropTest(){
 				
 			}
@@ -23,8 +23,8 @@ public class FileProcessorTestCase {
 		try{
 			PropTest pt = new PropTest();
 			Container.injectProperties(pt);
-			Assert.assertEquals("First Assert", "http://www.google.com.co", pt.url);
-			Assert.assertEquals("Second Assert", "Hola Mundo!!", pt.sayHello);
+			Assert.assertEquals("First Assert", "http://www.i2btech.com", pt.url);
+			Assert.assertEquals("Second Assert", "Hello World!!", pt.hello);
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
@@ -32,10 +32,10 @@ public class FileProcessorTestCase {
 	
 	@Test
 	public void testFilePropertiesFile() {
-		@Properties("/home/rampi/properties/test.properties")
+		@Properties("src/test/resources/test.properties")
 		class PropTest{
-			@Properties(key="saludo")
-			private String sayHello;
+			@Properties(key="sayHello")
+			private String hello;
 			public PropTest(){
 				
 			}
@@ -43,10 +43,10 @@ public class FileProcessorTestCase {
 		try{
 			PropTest pt = new PropTest();
 			Container.injectProperties(pt);
-			Assert.assertEquals("Second Assert", "Hola Mundo!!", pt.sayHello);
+			Assert.assertEquals("Second Assert", "Hello World!!", pt.hello);
 		}catch(Exception ex){
 			ex.printStackTrace();
 		}
 	}
-
+	
 }
