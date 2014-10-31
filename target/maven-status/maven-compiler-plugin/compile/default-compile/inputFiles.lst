@@ -1,0 +1,5 @@
+/home/rampi/workspace-cybertaxi/properties-util/src/main/java/cl/i2b/properties/process/Processor.java
+/home/rampi/workspace-cybertaxi/properties-util/src/main/java/cl/i2b/properties/container/Container.java
+/home/rampi/workspace-cybertaxi/properties-util/src/main/java/cl/i2b/properties/process/impl/FileProcessor.java
+/home/rampi/workspace-cybertaxi/properties-util/src/main/java/cl/i2b/properties/annotations/Properties.java
+/home/rampi/workspace-cybertaxi/properties-util/src/main/java/cl/i2b/properties/process/impl/JDBCProcessor.java
