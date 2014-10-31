@@ -49,17 +49,10 @@ public class Container {
 				if( value == null || (value != null && value.isEmpty()) )throw new IllegalArgumentException("You need specify an default value or an path value");				
 				if( prop != null && value != null && !value.equals("") ){
 					Matcher m = jdbcPattern.matcher(prop.value());
-					if(m.find()){
-						JDBCProcessor jdbcProccOotb = new JDBCProcessor();
-						processorCache.put(clazz.getName(), jdbcProccOotb);
-						jdbcProccOotb.processClass(prop);
-						return jdbcProccOotb;
-					}else{
-						FileProcessor fileProccOotb = new FileProcessor();
-						processorCache.put(clazz.getName(), fileProccOotb);
-						fileProccOotb.processClass(prop);
-						return fileProccOotb;
-					}
+					Processor processor = m.find() ? new JDBCProcessor() : new FileProcessor(); 
+					processorCache.put(clazz.getName(), processor);
+					processor.processClass(prop);
+					return processor;
 				}
 			}
 		}
