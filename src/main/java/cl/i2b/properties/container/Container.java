@@ -1,9 +1,7 @@
 package cl.i2b.properties.container;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import cl.i2b.properties.annotations.Properties;
@@ -13,50 +11,86 @@ import cl.i2b.properties.process.impl.JDBCProcessor;
 
 public class Container {
 
-	private static String jdbcPrefix = "(?<=//)[^:]*";
+	private static String jdbcPrefix = "jdbc:(.*)";
+	private static String filePrefix = ".*/.*";
 	
 	private static Pattern jdbcPattern = Pattern.compile(jdbcPrefix);
+	private static Pattern filePattern = Pattern.compile(filePrefix);
 	
 	private static HashMap<String, Processor> processorCache = new HashMap<String, Processor>();
 	
 	public static void injectProperties( Object obj ) throws ClassNotFoundException, InstantiationException, IllegalAccessException{
 		Class<?> clazz = Class.forName(obj.getClass().getName());
-		Processor proc = processClassAnnotations(clazz);
-		processFieldsAnnotations(obj, proc, clazz);
-	}
-	
-	private static void processFieldsAnnotations(Object obj, Processor proc, Class<?> clazz) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
-		Field[] fields = clazz.getDeclaredFields();
-		for( Field field : fields ){
-			field.setAccessible(true);
-			Properties properties = field.getAnnotation(Properties.class);
-			if( properties != null ){
-				String value = proc.processField(properties, field.getName());
-				if( field.getType().getSimpleName().equals("String") ){
-					field.set(obj, value);
+		Processor proc = getClassProcessor(clazz);
+		for(Field f:clazz.getDeclaredFields()) {
+			Processor fieldProcessor = getFieldProcessor(proc, f);
+			if(fieldProcessor != null) {
+				Properties p = f.getAnnotation(Properties.class);
+				if(p != null) {
+					boolean oldAccesible = f.isAccessible();
+					f.setAccessible(true);
+					f.set(obj, fieldProcessor.processField(p, f.getName()));
+					f.setAccessible(oldAccesible);
 				}
 			}
 		}
+		
 	}
 	
-	private static Processor processClassAnnotations(Class<?> clazz) throws InstantiationException, IllegalAccessException, ClassNotFoundException{
-		if( processorCache.containsKey(clazz.getName()) )return processorCache.get(clazz.getName());
-		Annotation[] ann = clazz.getAnnotations();
-		for( Annotation an : ann ){
-			if( an.annotationType().equals(Properties.class) ){
-				Properties prop = (Properties)an;
-				String value = prop.value() != null && !prop.value().isEmpty() ? prop.value() : prop.path();
-				if( value == null || (value != null && value.isEmpty()) )throw new IllegalArgumentException("You need specify an default value or an path value");				
-				if( prop != null && value != null && !value.equals("") ){
-					Matcher m = jdbcPattern.matcher(prop.value());
-					Processor processor = m.find() ? new JDBCProcessor() : new FileProcessor(); 
-					processorCache.put(clazz.getName(), processor);
-					processor.processClass(prop);
-					return processor;
-				}
+	private static Processor getClassProcessor(Class<?> clazz) {
+		if( processorCache.containsKey(clazz.getName()) )
+			return processorCache.get(clazz.getName());
+		Properties prop = clazz.getAnnotation(Properties.class);
+		if (prop == null)
+	
+			return null;
+		Processor p = createProcessorFromProperties(clazz.getName(), prop);
+		if (p != null)
+			p.processClass(prop);
+		return p;
+	}
+	
+	private static Processor getFieldProcessor(Processor defaultProcessor, Field field) {
+		Properties prop = field.getAnnotation(Properties.class);
+		if(prop == null)
+			return null;
+		Processor p = createProcessorFromProperties(field.getDeclaringClass().getName() + "."  + field.getName(), prop);
+		if (p == null) {
+			return defaultProcessor;
+		}
+		return p; 
+	}
+	
+	private static Processor createProcessorFromProperties(String name, Properties prop) {
+		if(processorCache.containsKey(name))
+			return processorCache.get(name);
+		String value = prop.value();
+		String jdbc = prop.jdbc();
+		String driverClassname = prop.driverClassName();
+		if(value.equals("")) value = null;
+		if(jdbc.equals("")) jdbc = null;
+		if(driverClassname.equals("")) driverClassname = null;
+		Processor proc = null; 
+		if((value != null || jdbc != null) && driverClassname != null){
+			String p = jdbc == null?value:jdbc;
+			if(jdbcPattern.matcher(p).find()) {
+				proc = new JDBCProcessor();
 			}
 		}
-		return null;
+		String path = prop.path();
+		if ("".equals(path)) path = null;
+		if(proc == null && (value != null || path != null) && driverClassname == null) {
+			String p = path == null?value:path;
+			if(filePattern.matcher(p).find()) {
+				proc = new FileProcessor();
+			}
+		}
+		
+		if (proc == null)
+			return null; 
+		
+		processorCache.put(name, proc);
+		return proc;
 	}
 		
 }

@@ -15,6 +15,10 @@ public @interface Properties {
 	
 	String jdbc() default "";
 	
+	String username() default "";
+	
+	String password() default "";
+	
 	String query() default "";
 	
 	String key() default "";
