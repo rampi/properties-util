@@ -51,7 +51,10 @@ public class FileProcessor implements Processor{
 	}
 	
 	public String processField(Properties properties, String fieldName) {
-		String key = properties.key() != null && !properties.key().isEmpty() ? properties.key() : fieldName;						
+		String key = properties.key() != null && !properties.key().isEmpty() ? properties.key() : fieldName;
+		if(propertiesFile == null) {
+			processClass(properties);
+		}
 		if( key != null && !key.isEmpty() && propertiesFile != null ){			
 			return propertiesFile.getProperty(key);
 		}

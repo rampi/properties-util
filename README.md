@@ -3,7 +3,7 @@ I2B Properties-util
 
 This utility provided to the developer community by [I2B technologies](http://www.i2btech.com/) allows to inject parameters into class fields, retrieved from a property file or a jdbc connection.  
 
-Our primary goal in this project is ease of use, so you can start using it right away with almost no instructions.
+Our primary goal in this project is ease of use, so you can start using it right away with almost no instructions, that's why we're using only one annotation `@Properties`.
 
 # Use Cases
 For following examples we are using a file named test.properties located in same package as classes referenced here:
@@ -192,6 +192,7 @@ MIT
 - Allow to extend (eg. XML source, HTTP source, etc.)
 - Optimize performance by allowing to inject values on compile time
 - Include as maven dependecy
+- Be able to specify bundle resources like packages or properties file
 
 # Contributors
 - Robinson Mesino

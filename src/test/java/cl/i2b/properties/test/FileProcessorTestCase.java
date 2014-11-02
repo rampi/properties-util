@@ -49,4 +49,19 @@ public class FileProcessorTestCase {
 		}
 	}
 	
+	@Test
+	public void testAnnotatedField() throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+		class PropTest{
+			@Properties(path="src/test/resources/test.properties", key="sayHello")
+			private String hello;
+			public PropTest(){
+				
+			}
+		}
+		PropTest pt = new PropTest();
+		Container.injectProperties(pt);
+		Assert.assertEquals("Second Assert", "Hello World!!", pt.hello);
+	}
+
+		
 }

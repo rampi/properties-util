@@ -75,6 +75,8 @@ public class Container {
 			String p = jdbc == null?value:jdbc;
 			if(jdbcPattern.matcher(p).find()) {
 				proc = new JDBCProcessor();
+				processorCache.put(name, proc);
+				return proc;
 			}
 		}
 		String path = prop.path();
@@ -83,14 +85,12 @@ public class Container {
 			String p = path == null?value:path;
 			if(filePattern.matcher(p).find()) {
 				proc = new FileProcessor();
+				processorCache.put(name, proc);
+				return proc;
 			}
 		}
 		
-		if (proc == null)
-			return null; 
-		
-		processorCache.put(name, proc);
-		return proc;
+		return null;
 	}
 		
 }

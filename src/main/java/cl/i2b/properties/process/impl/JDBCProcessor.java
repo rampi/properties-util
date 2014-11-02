@@ -15,13 +15,20 @@ public class JDBCProcessor implements Processor{
 	
 	public void processClass(Properties properties) {
 		keys = new HashMap<String, String>();
-		populateKeys(properties.driverClassName(), properties.value(), properties.query());
+		String url = properties.jdbc();
+		if(url == null || "".equals(url))
+			url = properties.value();
+		populateKeys(properties.driverClassName(), url, properties.query());
 	}
 
 	public String processField(Properties properties, String fieldName) {
 		if(keys == null) {
 			keys = new HashMap<String, String>();
-			this.populateKeys(properties.driverClassName(), properties.value(), properties.query());
+			String url = properties.jdbc();
+			if(url == null || "".equals(url))
+				url = properties.value();
+			
+			this.populateKeys(properties.driverClassName(), url, properties.query());
 		}
 		if(properties.key() != null && !properties.key().equals("")) {
 			return keys.get(properties.key());
