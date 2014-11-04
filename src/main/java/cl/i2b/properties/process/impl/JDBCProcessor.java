@@ -40,9 +40,10 @@ public class JDBCProcessor implements Processor{
 	}
 	
 	private void populateKeys(String driver, String url, String query) {
+		Connection conn = null;
 		try {
 			Class.forName(driver);
-			Connection conn = DriverManager.getConnection(url);
+			conn = DriverManager.getConnection(url);
 			ResultSet rs = conn.createStatement().executeQuery(query);
 			while(rs.next()) {
 				keys.put(rs.getString(1), rs.getString(2));
@@ -52,7 +53,13 @@ public class JDBCProcessor implements Processor{
 			e.printStackTrace();
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}		
+		} finally {
+			try {
+				if(conn != null && !conn.isClosed()) {
+					conn.close();
+				}
+			} catch (SQLException e) { }
+		}
 	}
 
 }
