@@ -193,6 +193,8 @@ MIT
 - Optimize performance by allowing to inject values on compile time
 - Include as maven dependecy
 - Be able to specify bundle resources like packages or properties file
+- Use jdbc connections pool
+- Add jndi data source connections
 
 # Contributors
 - Robinson Mesino
