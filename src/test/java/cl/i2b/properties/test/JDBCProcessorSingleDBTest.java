@@ -1,12 +1,9 @@
 package cl.i2b.properties.test;
 
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
