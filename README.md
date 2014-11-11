@@ -195,6 +195,7 @@ MIT
 - Be able to specify bundle resources like packages or properties file
 - Use jdbc connections pool
 - Add jndi data source connections
+- Create release version
 
 # Contributors
 - Robinson Mesino
