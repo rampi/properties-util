@@ -1,7 +1,7 @@
-I2B Properties-util
+Properties-util
 ===================
 
-This utility provided to the developer community by [I2B technologies](http://www.i2btech.com/) allows to inject parameters into class fields, retrieved from a property file or a jdbc connection.  
+This utility provided to the developer community, allows to inject parameters into class fields, retrieved from a property file or a jdbc connection.  
 
 Our primary goal in this project is ease of use, so you can start using it right away with almost no instructions, that's why we're using only one annotation `@Properties`.
 
@@ -24,7 +24,7 @@ In two simple steps you might start using the `@Properties` annotation to retrie
 Annotate your class indicating the relative path of the .properties file and annotate fields to 
 
 ``` java
-import cl.i2b.properties.annotations.Properties;
+import com.xpec.properties.annotations.Properties;
 
 @Properties("./test.properties") // .properties file located in same class package
 public class User {
@@ -43,7 +43,7 @@ public class User {
 
 ### Second Step: Inject Values
 ``` java
-import cl.i2b.properties.container.Container;
+import com.xpec.properties.container.Container;
 
 public class Client {
     public static void main(String args[]) {
@@ -77,9 +77,9 @@ insert into parameters (pkey, pvalue) values ('firstname', 'Mary'), ('lastname',
 Then you can retrieve the keys to be injected in the class fields from a jdbc connection.  Be sure that driver class specified next is available in the classpath:
 
 ``` java
-import cl.i2b.properties.annotations.Properties;
+import com.xpec.properties.annotations.Properties;
 
-@Properties(jdbc="jdbc:mysql://localhost:3306/mydb?user=i2b&password=i2b", // jdbc connection url
+@Properties(jdbc="jdbc:mysql://localhost:3306/mydb?user=admin&password=admin", // jdbc connection url
             driverClassName="com.mysql.jdbc.Driver", // jdbc driver
             query="select p.pkey, p.pvalue from parameters p")  // sql query that retrieves key/value pairs, this query must return key first and value later
 public class User {
@@ -111,17 +111,17 @@ So you can inject values from multiple databases like this:
 public class SimplePojo {
    
    @Properties(driverClassName="org.h2.Driver",
-               jdbc="jdbc:h2:~/h2altdb;IFEXISTS=TRUE;USER=i2b;PASSWORD=i2b",
+               jdbc="jdbc:h2:~/h2altdb;IFEXISTS=TRUE;USER=admin;PASSWORD=admin",
                query="select dp.paramKey, dp.paramValue from dynamicparameters dp")
    private String language; // injects language value from dynamicparameters table
 
    @Properties(driverClassName="org.h2.Driver",
-           jdbc="jdbc:h2:~/h2altdb;IFEXISTS=TRUE;USER=i2b;PASSWORD=i2b",
+           jdbc="jdbc:h2:~/h2altdb;IFEXISTS=TRUE;USER=admin;PASSWORD=admin",
            query="select dp.paramKey, dp.paramValue from dynamicparameters dp",
            key="os")
    private String operatingSystem; // injects value os from dynamicparameters table
    
-   @Properties(jdbc="jdbc:mysql://localhost:3306/mydb?user=i2b&password=i2b", 
+   @Properties(jdbc="jdbc:mysql://localhost:3306/mydb?user=admin&password=admin", 
             driverClassName="com.mysql.jdbc.Driver",
             query="select p.pkey, p.pvalue from parameters p")
    private String firstname; // injects firstname from parameters in mydb
@@ -135,7 +135,7 @@ Annotating the class will define a default key/value pairs source:
 
 ``` java
 @Properties(driverClassName="org.h2.Driver",
-            jdbc="jdbc:h2:~/h2altdb;IFEXISTS=TRUE;USER=i2b;PASSWORD=i2b",
+            jdbc="jdbc:h2:~/h2altdb;IFEXISTS=TRUE;USER=admin;PASSWORD=admin",
             query="select dp.paramKey, dp.paramValue from dynamicparameters dp")
 public class SimplePojo {
    
@@ -148,7 +148,7 @@ public class SimplePojo {
    @Properties(path="./test.properties")
    private String firstname; // injects firstname from test.properties file
    
-   @Properties(jdbc="jdbc:mysql://localhost:3306/mydb?user=i2b&password=i2b", 
+   @Properties(jdbc="jdbc:mysql://localhost:3306/mydb?user=admin&password=admin", 
             driverClassName="com.mysql.jdbc.Driver",
             query="select p.pkey, p.pvalue from parameters p")
    private String email; // injects email from table parameters in mydb
@@ -203,4 +203,4 @@ MIT
 - Edwin Vargas
 
 # Contact
-Feel free to drop us an email at [community@i2btech.com](mailto:community@i2btech.com) with comments and suggestions
+Feel free to drop us an email at [community@xpectrumtech.com](mailto:community@xpectrumtech.com) with comments and suggestions

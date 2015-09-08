@@ -1,1 +1,5 @@
-/home/rampi/workspace-cybertaxi/properties-util/src/test/java/cl/i2b/properties/test/FileProcessorTestCase.java
+/media/rmesino/Linux Storage/git/properties-util/properties-util/src/test/java/com/xpec/properties/test/JDBCProcessorSingleDBTest.java
+/media/rmesino/Linux Storage/git/properties-util/properties-util/src/test/java/com/xpec/properties/test/MultipleSourcesTest.java
+/media/rmesino/Linux Storage/git/properties-util/properties-util/src/test/java/com/xpec/properties/test/JDBCProcessorMultipleDBTest.java
+/media/rmesino/Linux Storage/git/properties-util/properties-util/src/test/java/com/xpec/properties/test/FileProcessorTestCase.java
+/media/rmesino/Linux Storage/git/properties-util/properties-util/src/test/java/com/xpec/properties/test/utils/TestUtil.java
